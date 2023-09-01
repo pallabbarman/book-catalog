@@ -11,9 +11,11 @@ exports.userValidation = zod_1.default.object({
         name: zod_1.default.string({
             required_error: 'Name is required!',
         }),
-        email: zod_1.default.string({
+        email: zod_1.default
+            .string({
             required_error: 'Email is required!',
-        }),
+        })
+            .email({ message: 'Please enter a valid email!' }),
         password: zod_1.default.string({
             required_error: 'Password is required!',
         }),
