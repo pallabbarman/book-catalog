@@ -3,8 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userValidation = void 0;
-/* eslint-disable import/prefer-default-export */
+exports.loginValidation = exports.userValidation = void 0;
 const zod_1 = __importDefault(require("zod"));
 exports.userValidation = zod_1.default.object({
     body: zod_1.default.object({
@@ -30,6 +29,18 @@ exports.userValidation = zod_1.default.object({
         }),
         profileImg: zod_1.default.string({
             required_error: 'Profile image is required!',
+        }),
+    }),
+});
+exports.loginValidation = zod_1.default.object({
+    body: zod_1.default.object({
+        email: zod_1.default
+            .string({
+            required_error: 'Email is required!',
+        })
+            .email({ message: 'Please enter a valid email!' }),
+        password: zod_1.default.string({
+            required_error: 'Password is required!',
         }),
     }),
 });
