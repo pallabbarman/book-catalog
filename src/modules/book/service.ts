@@ -27,7 +27,7 @@ export const findAllBooks = async (
     options: IPaginationOptions
 ): Promise<IGenericResponse<Book[]>> => {
     const { search, ...filterData } = filters;
-    const { limit, page, skip, sortBy, sortOrder } = calculatePagination(options);
+    const { size, page, skip, sortBy, sortOrder } = calculatePagination(options);
 
     const andConditions = [];
 
@@ -62,7 +62,7 @@ export const findAllBooks = async (
             reviewsAndRatings: true,
         },
         skip,
-        take: limit,
+        take: size,
         orderBy:
             sortBy && sortOrder
                 ? { [sortBy]: sortOrder }
@@ -74,12 +74,14 @@ export const findAllBooks = async (
     const total = await prisma.book.count({
         where: whereConditions,
     });
+    const totalPage = Math.ceil(total / size);
 
     return {
         meta: {
             page,
-            limit,
+            size,
             total,
+            totalPage,
         },
         data: result,
     };
@@ -122,4 +124,38 @@ export const removeBook = async (id: string): Promise<Book> => {
     });
 
     return result;
+};
+
+export const findBooksByCategoryId = async (
+    id: string,
+    options: IPaginationOptions
+): Promise<IGenericResponse<Book[]>> => {
+    const { size, page, skip, sortBy, sortOrder } = calculatePagination(options);
+
+    const result = await prisma.book.findMany({
+        where: {
+            categoryId: id,
+        },
+        skip,
+        take: size,
+        orderBy:
+            sortBy && sortOrder
+                ? { [sortBy]: sortOrder }
+                : {
+                      createdAt: 'desc',
+                  },
+    });
+
+    const total = await prisma.book.count();
+    const totalPage = Math.ceil(total / size);
+
+    return {
+        meta: {
+            page,
+            size,
+            total,
+            totalPage,
+        },
+        data: result,
+    };
 };

@@ -9,5 +9,6 @@ const controller_1 = require("./controller");
 const validation_1 = require("./validation");
 const router = (0, express_1.Router)();
 router.post('/signup', (0, validateRequest_1.default)(validation_1.userValidation), controller_1.createUser);
+router.post('/signin', (0, validateRequest_1.default)(validation_1.loginValidation), controller_1.loginUser);
 const authRoutes = router;
 exports.default = authRoutes;

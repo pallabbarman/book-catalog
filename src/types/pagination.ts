@@ -1,13 +1,13 @@
 export interface IPaginationOptions {
     page?: number;
-    limit?: number;
+    size?: number;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
 }
 
 export interface IPaginationOptionsResult {
     page: number;
-    limit: number;
+    size: number;
     skip: number;
     sortBy: string;
     sortOrder: 'asc' | 'desc';

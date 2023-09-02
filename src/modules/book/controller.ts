@@ -7,7 +7,14 @@ import catchAsync from 'utils/catchAsync';
 import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { bookFilterableFields } from './constant';
-import { editBook, findAllBooks, findBook, insertBook, removeBook } from './service';
+import {
+    editBook,
+    findAllBooks,
+    findBook,
+    findBooksByCategoryId,
+    insertBook,
+    removeBook,
+} from './service';
 
 export const createBook = catchAsync(async (req: Request, res: Response) => {
     const result = await insertBook(req.body);
@@ -71,5 +78,20 @@ export const deleteBook = catchAsync(async (req: Request, res: Response) => {
         success: true,
         message: 'Book deleted successfully!',
         data: result,
+    });
+});
+
+export const getBooksByCategoryId = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+
+    const options = pick(req.query, paginationFields);
+    const result = await findBooksByCategoryId(id, options);
+
+    sendResponse<Book[]>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Books with associated category data fetched successfully!',
+        meta: result.meta,
+        data: result.data,
     });
 });

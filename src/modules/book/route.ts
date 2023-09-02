@@ -1,16 +1,25 @@
-/* eslint-disable object-curly-newline */
 import { Router } from 'express';
+import auth from 'middlewares/auth';
 import validateRequest from 'middlewares/validateRequest';
-import { createBook, deleteBook, getAllBooks, getBook, updateBook } from './controller';
+import { USER_ROLE } from 'types/user';
+import {
+    createBook,
+    deleteBook,
+    getAllBooks,
+    getBook,
+    getBooksByCategoryId,
+    updateBook,
+} from './controller';
 import { bookValidation, updateBookValidation } from './validation';
 
 const router = Router();
 
-router.post('/create-book', validateRequest(bookValidation), createBook);
+router.post('/create-book', validateRequest(bookValidation), auth(USER_ROLE.ADMIN), createBook);
 router.get('/', getAllBooks);
 router.get('/:id', getBook);
-router.patch('/:id', validateRequest(updateBookValidation), updateBook);
-router.delete('/:id', deleteBook);
+router.get('/:id/category', getBooksByCategoryId);
+router.patch('/:id', validateRequest(updateBookValidation), auth(USER_ROLE.ADMIN), updateBook);
+router.delete('/:id', auth(USER_ROLE.ADMIN), deleteBook);
 
 const bookRoutes = router;
 

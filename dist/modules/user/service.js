@@ -9,7 +9,7 @@ const prisma_1 = __importDefault(require("../../utils/prisma"));
 const constant_1 = require("./constant");
 const findAllUsers = async (filters, options) => {
     const { search, ...filterData } = filters;
-    const { limit, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
+    const { size, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
     const andConditions = [];
     if (search) {
         andConditions.push({
@@ -34,7 +34,7 @@ const findAllUsers = async (filters, options) => {
     const result = await prisma_1.default.user.findMany({
         where: whereConditions,
         skip,
-        take: limit,
+        take: size,
         orderBy: sortBy && sortOrder
             ? { [sortBy]: sortOrder }
             : {
@@ -44,11 +44,13 @@ const findAllUsers = async (filters, options) => {
     const total = await prisma_1.default.user.count({
         where: whereConditions,
     });
+    const totalPage = Math.ceil(total / size);
     return {
         meta: {
             page,
-            limit,
+            size,
             total,
+            totalPage,
         },
         data: result,
     };

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeBook = exports.editBook = exports.findBook = exports.findAllBooks = exports.insertBook = void 0;
+exports.findBooksByCategoryId = exports.removeBook = exports.editBook = exports.findBook = exports.findAllBooks = exports.insertBook = void 0;
 const pagination_1 = __importDefault(require("../../utils/pagination"));
 const prisma_1 = __importDefault(require("../../utils/prisma"));
 const constant_1 = require("./constant");
@@ -20,7 +20,7 @@ const insertBook = async (data) => {
 exports.insertBook = insertBook;
 const findAllBooks = async (filters, options) => {
     const { search, ...filterData } = filters;
-    const { limit, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
+    const { size, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
     const andConditions = [];
     if (search) {
         andConditions.push({
@@ -49,7 +49,7 @@ const findAllBooks = async (filters, options) => {
             reviewsAndRatings: true,
         },
         skip,
-        take: limit,
+        take: size,
         orderBy: sortBy && sortOrder
             ? { [sortBy]: sortOrder }
             : {
@@ -59,11 +59,13 @@ const findAllBooks = async (filters, options) => {
     const total = await prisma_1.default.book.count({
         where: whereConditions,
     });
+    const totalPage = Math.ceil(total / size);
     return {
         meta: {
             page,
-            limit,
+            size,
             total,
+            totalPage,
         },
         data: result,
     };
@@ -105,3 +107,30 @@ const removeBook = async (id) => {
     return result;
 };
 exports.removeBook = removeBook;
+const findBooksByCategoryId = async (id, options) => {
+    const { size, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
+    const result = await prisma_1.default.book.findMany({
+        where: {
+            categoryId: id,
+        },
+        skip,
+        take: size,
+        orderBy: sortBy && sortOrder
+            ? { [sortBy]: sortOrder }
+            : {
+                createdAt: 'desc',
+            },
+    });
+    const total = await prisma_1.default.book.count();
+    const totalPage = Math.ceil(total / size);
+    return {
+        meta: {
+            page,
+            size,
+            total,
+            totalPage,
+        },
+        data: result,
+    };
+};
+exports.findBooksByCategoryId = findBooksByCategoryId;

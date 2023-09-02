@@ -19,7 +19,7 @@ const insertCategory = async (data) => {
 exports.insertCategory = insertCategory;
 const findAllCategories = async (filters, options) => {
     const { search, ...filterData } = filters;
-    const { limit, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
+    const { size, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
     const andConditions = [];
     if (search) {
         andConditions.push({
@@ -47,7 +47,7 @@ const findAllCategories = async (filters, options) => {
             books: true,
         },
         skip,
-        take: limit,
+        take: size,
         orderBy: sortBy && sortOrder
             ? { [sortBy]: sortOrder }
             : {
@@ -57,11 +57,13 @@ const findAllCategories = async (filters, options) => {
     const total = await prisma_1.default.category.count({
         where: whereConditions,
     });
+    const totalPage = Math.ceil(total / size);
     return {
         meta: {
             page,
-            limit,
+            size,
             total,
+            totalPage,
         },
         data: result,
     };
