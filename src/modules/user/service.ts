@@ -45,6 +45,7 @@ export const findAllUsers = async (
 
     const result = await prisma.user.findMany({
         where: whereConditions,
+        include: { orders: true },
         skip,
         take: size,
         orderBy:
@@ -73,9 +74,8 @@ export const findAllUsers = async (
 
 export const findUser = async (id: string): Promise<User | null> => {
     const result = await prisma.user.findUnique({
-        where: {
-            id,
-        },
+        where: { id },
+        include: { orders: true },
     });
 
     return result;
@@ -83,10 +83,9 @@ export const findUser = async (id: string): Promise<User | null> => {
 
 export const editUser = async (id: string, payload: Partial<User>): Promise<User> => {
     const result = await prisma.user.update({
-        where: {
-            id,
-        },
+        where: { id },
         data: payload,
+        include: { orders: true },
     });
 
     return result;
@@ -94,9 +93,7 @@ export const editUser = async (id: string, payload: Partial<User>): Promise<User
 
 export const removeUser = async (id: string): Promise<User> => {
     const result = await prisma.user.delete({
-        where: {
-            id,
-        },
+        where: { id },
     });
 
     return result;
