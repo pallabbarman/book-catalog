@@ -5,6 +5,7 @@
 import { Prisma, User } from '@prisma/client';
 import { IPaginationOptions } from 'types/pagination';
 import { IGenericResponse } from 'types/response';
+import { IUser } from 'types/user';
 import calculatePagination from 'utils/pagination';
 import prisma from 'utils/prisma';
 import { userSearchableFields } from './constant';
@@ -13,7 +14,7 @@ import { IUserFilter } from './interface';
 export const findAllUsers = async (
     filters: IUserFilter,
     options: IPaginationOptions
-): Promise<IGenericResponse<User[]>> => {
+): Promise<IGenericResponse<IUser[]>> => {
     const { search, ...filterData } = filters;
     const { size, page, skip, sortBy, sortOrder } = calculatePagination(options);
 
@@ -45,7 +46,6 @@ export const findAllUsers = async (
 
     const result = await prisma.user.findMany({
         where: whereConditions,
-        include: { orders: true },
         skip,
         take: size,
         orderBy:
@@ -54,6 +54,18 @@ export const findAllUsers = async (
                 : {
                       createdAt: 'desc',
                   },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
+        },
     });
 
     const total = await prisma.user.count({
@@ -72,28 +84,62 @@ export const findAllUsers = async (
     };
 };
 
-export const findUser = async (id: string): Promise<User | null> => {
+export const findUser = async (id: string): Promise<IUser | null> => {
     const result = await prisma.user.findUnique({
         where: { id },
-        include: { orders: true },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
+        },
     });
 
     return result;
 };
 
-export const editUser = async (id: string, payload: Partial<User>): Promise<User> => {
+export const editUser = async (id: string, payload: Partial<User>): Promise<IUser> => {
     const result = await prisma.user.update({
         where: { id },
         data: payload,
-        include: { orders: true },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
+        },
     });
 
     return result;
 };
 
-export const removeUser = async (id: string): Promise<User> => {
+export const removeUser = async (id: string): Promise<IUser> => {
     const result = await prisma.user.delete({
         where: { id },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
+        },
     });
 
     return result;

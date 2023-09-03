@@ -40,6 +40,18 @@ const findAllUsers = async (filters, options) => {
             : {
                 createdAt: 'desc',
             },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
+        },
     });
     const total = await prisma_1.default.user.count({
         where: whereConditions,
@@ -58,8 +70,18 @@ const findAllUsers = async (filters, options) => {
 exports.findAllUsers = findAllUsers;
 const findUser = async (id) => {
     const result = await prisma_1.default.user.findUnique({
-        where: {
-            id,
+        where: { id },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
         },
     });
     return result;
@@ -67,18 +89,38 @@ const findUser = async (id) => {
 exports.findUser = findUser;
 const editUser = async (id, payload) => {
     const result = await prisma_1.default.user.update({
-        where: {
-            id,
-        },
+        where: { id },
         data: payload,
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
+        },
     });
     return result;
 };
 exports.editUser = editUser;
 const removeUser = async (id) => {
     const result = await prisma_1.default.user.delete({
-        where: {
-            id,
+        where: { id },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+            orders: true,
         },
     });
     return result;

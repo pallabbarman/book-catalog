@@ -5,16 +5,29 @@ import envConfig from 'configs';
 import ApiError from 'errors/apiError';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
+import { IUser } from 'types/user';
 import { createToken } from 'utils/jwt';
 import prisma from 'utils/prisma';
 import { ILoginUser, ILoginUserResponse } from './interface';
 
-export const insertUser = async (data: User): Promise<User> => {
+export const insertUser = async (data: User): Promise<IUser> => {
     const password = await hash(data.password, Number(envConfig.bcrypt_salt_round));
+
     const result = await prisma.user.create({
         data: {
             ...data,
             password,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
         },
     });
 

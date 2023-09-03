@@ -17,6 +17,17 @@ const insertUser = async (data) => {
             ...data,
             password,
         },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+        },
     });
     return result;
 };

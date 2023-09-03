@@ -1,8 +1,8 @@
 /* eslint-disable object-curly-newline */
-import { User } from '@prisma/client';
 import paginationFields from 'constants/pagination';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { IUser } from 'types/user';
 import catchAsync from 'utils/catchAsync';
 import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
@@ -15,7 +15,7 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
     const result = await findAllUsers(filters, options);
 
-    sendResponse<User[]>(res, {
+    sendResponse<IUser[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Users retrieved successfully!',
@@ -29,7 +29,7 @@ export const getUser = catchAsync(async (req: Request, res: Response) => {
 
     const result = await findUser(id);
 
-    sendResponse<User>(res, {
+    sendResponse<IUser>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'User retrieved successfully!',
@@ -42,7 +42,7 @@ export const updateUser = catchAsync(async (req: Request, res: Response) => {
 
     const result = await editUser(id, req.body);
 
-    sendResponse<User>(res, {
+    sendResponse<IUser>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'User updated successfully!',
@@ -55,7 +55,7 @@ export const deleteUser = catchAsync(async (req: Request, res: Response) => {
 
     const result = await removeUser(id);
 
-    sendResponse<User>(res, {
+    sendResponse<IUser>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'User deleted successfully!',
