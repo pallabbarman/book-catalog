@@ -16,7 +16,7 @@ model User {
   email             String            @unique
   password          String
   role              String
-  contactNo         String
+  contactNo         String            @unique
   address           String
   profileImg        String
   createdAt         DateTime          @default(now())

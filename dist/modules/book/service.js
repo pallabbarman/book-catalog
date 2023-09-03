@@ -121,7 +121,7 @@ const findBooksByCategoryId = async (id, options) => {
                 createdAt: 'desc',
             },
     });
-    const total = await prisma_1.default.book.count();
+    const total = await prisma_1.default.book.count({ where: { categoryId: id } });
     const totalPage = Math.ceil(total / size);
     return {
         meta: {

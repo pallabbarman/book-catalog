@@ -146,7 +146,7 @@ export const findBooksByCategoryId = async (
                   },
     });
 
-    const total = await prisma.book.count();
+    const total = await prisma.book.count({ where: { categoryId: id } });
     const totalPage = Math.ceil(total / size);
 
     return {
