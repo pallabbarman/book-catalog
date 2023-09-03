@@ -34,8 +34,5 @@
 4.  Order
 
     -   https://web-book-catalog.onrender.com/orders/create-order (POST)
-    -   https://web-book-catalog.onrender.com/books (GET)
-    -   https://web-book-catalog.onrender.com/books/24d78039-9b8f-4b77-b4ed-83bf31a0a93f (GET)
-    -   https://web-book-catalog.onrender.com/books/85241bef-5ed9-4b50-b576-7affc3b95dc1/category (GET)
-    -   https://web-book-catalog.onrender.com/books/24d78039-9b8f-4b77-b4ed-83bf31a0a93f (PATCH)
-    -   https://web-book-catalog.onrender.com/books/24d78039-9b8f-4b77-b4ed-83bf31a0a93f (DELETE)
+    -   https://web-book-catalog.onrender.com/orders (GET)
+    -   https://web-book-catalog.onrender.com/orders/3914c613-4f41-4d3f-b918-29b2558c73e8 (GET)
